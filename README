@@ -32,7 +32,6 @@ Now create new view projected on your table to log.
 
 	$ php symfony log:generate-userLog article
 
-Now the plugin is fully installed and working.
 
 
 If you want to rbuild just the model, filters and forms

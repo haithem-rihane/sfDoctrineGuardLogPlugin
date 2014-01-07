@@ -1,7 +1,5 @@
 # sfDoctrineGuardLogPlugin - A simple login history and log for sfGuardUsers
 
-
-
 Activate the plugin in your config/ProjectConfiguration.class.php
 
     $this->enablePlugins(..., 'sfDoctrineGuardLogPlugin');
