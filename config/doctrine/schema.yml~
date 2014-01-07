@@ -1,0 +1,26 @@
+UserLoginHistory:
+  actAs:
+    Timestampable:
+      updated:
+        disabled: true
+  columns:
+    ip: string(16)
+    state: string(6)
+    user_id: integer
+  relations:
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+      foreignAlias: LoginHistoryEntries
+
+UserLoginLog:
+  columns:
+    date: string(16)
+    user_id: integer
+  relations:
+    User:
+      class: sfGuardUser
+      local: user_id
+      foreign: id
+      foreignAlias: LoginHistoryLog

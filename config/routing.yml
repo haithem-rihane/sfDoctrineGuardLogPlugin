@@ -1,0 +1,17 @@
+user_login_history:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                UserLoginHistory
+    module:               user_login_history
+    prefix_path:          /user_login_history
+    column:               id
+    with_wildcard_routes: true
+
+user_login_log:
+  class: sfDoctrineRouteCollection
+  options:
+    model:                UserLoginLog
+    module:               user_login_log
+    prefix_path:          /user_login_log
+    column:               id
+    with_wildcard_routes: true

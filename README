@@ -1,0 +1,75 @@
+# sfDoctrineGuardLogPlugin - A simple login history and log for sfGuardUsers
+
+Activate the plugin in your config/ProjectConfiguration.class.php
+
+    $this->enablePlugins(..., 'sfDoctrineGuardLogPlugin');
+
+Now rebuild all model classes in order to complete the installation.
+
+    $ php symfony doctrine:build --all-classes
+
+The plugin is provided with behavior relations for __sfDoctrineGuardPlugin__.
+For created and updated options which are defined as active (__not disabled__)
+and __integer type__, __creator__ and __updator__ relations are available,
+respectively. This means, that if you attach Signable behavior (defined as
+mentioned above) to any of your model, you can directly access sfGuardUser
+class objects. For example, the _Article_ model is defined as follows:
+
+    Article:
+      actAs:
+        Signable: ~
+
+you can access the user who created/updated the Article (integer option is the
+default in the Signable):
+
+    [php]
+    echo $article->getCreator();
+    echo $article->getUpdator()->customMethod();
+
+
+
+Now create new view projected on your table to log.
+
+	$ php symfony log:generate-userLog article
+
+Now the plugin is fully installed and working.
+
+
+If you want to rbuild just the model, filters and forms
+	
+	$ php symfony doctrine:build --model --forms --models
+
+and Run SQL ligne
+#plugins/sfDoctrineGuardLogPlugin/sfDoctrineGuardLog.sql
+
+CREATE TABLE user_login_history (id BIGINT AUTO_INCREMENT, ip VARCHAR(16), state VARCHAR(6), user_id BIGINT, created_at DATETIME NOT NULL, INDEX user_id_idx (user_id), PRIMARY KEY(id)) ENGINE = INNODB;
+ALTER TABLE user_login_history ADD CONSTRAINT user_login_history_user_id_sf_guard_user_id FOREIGN KEY (user_id) REFERENCES sf_guard_user(id);
+
+
+ALTER TABLE  `table_name` ADD  `created_by` BIGINT( 20 ) NULL DEFAULT NULL ,
+ADD  `updated_by` BIGINT( 20 ) NULL DEFAULT NULL ,
+ADD INDEX (  `created_by` ,  `updated_by` );
+
+
+ALTER TABLE  `table_name` 
+ADD FOREIGN KEY (  `created_by` ) REFERENCES  `sf_guard_user` (
+`id`
+) ON DELETE SET NULL ON UPDATE SET NULL ;
+
+ALTER TABLE  `table_name` 
+ADD FOREIGN KEY (  `updated_by` ) REFERENCES  `sf_guard_user` (
+`id`
+) ON DELETE SET NULL ON UPDATE SET NULL ;
+
+
+Enable one or more modules in your `settings.yml` (optional)
+    For your backend application:  user_login_log, user_login_history
+
+              all:
+                .settings:
+                  enabled_modules:      [default, user_login_log, user_login_history]
+
+ Access the modules with the default route:
+
+    http://www.example.com/backend.php/user_login_log
+
